@@ -44,7 +44,10 @@ Future<http.Response> addTodo(String title, String desc, DateTime date) {
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: jsonEncode(
-        <String, dynamic>{'title': title, 'completed': false, 'date': date}),
+    body: jsonEncode(<String, dynamic>{
+      'title': title,
+      'completed': false,
+      'date': date.toString()
+    }),
   );
 }
