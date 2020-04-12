@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import './models/todo.dart';
+import 'main.dart';
 
 // Create a Form widget.
 class AddTodo extends StatefulWidget {
@@ -107,8 +108,9 @@ class AddTodoState extends State<AddTodo> {
                           // If the form is valid, display a Snackbar.
                           print(todoAt);
                           addTodo(title, desc, todoAt);
-                          Scaffold.of(context).showSnackBar(
-                              SnackBar(content: Text('Processing Data')));
+                          _onSubmit(context);
+                          // Scaffold.of(context).showSnackBar(
+                          //     SnackBar(content: Text('Processing Data')));
                         }
                       },
                       child: Text('Submit'),
@@ -118,4 +120,8 @@ class AddTodoState extends State<AddTodo> {
               ),
             )));
   }
+}
+
+_onSubmit(BuildContext context) {
+  Navigator.pushNamed(context, TodoRoute);
 }

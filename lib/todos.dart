@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import './models/todo.dart';
 import './todoItem.dart';
 import './main.dart';
+import './models/user.dart';
 import 'navdrawer.dart';
 
 class Todos extends StatefulWidget {
@@ -17,7 +18,14 @@ class _TodosState extends State<Todos> {
   @override
   void initState() {
     super.initState();
-    todos = getAll();
+    jwtOrEmpty.then((value) {
+      if (value == '') {
+        Navigator.pushNamed(context, LoginRoute);
+      }
+      print("todos token  page $value");
+      todos = getAll(value);
+      print("state todos end");
+    });
   }
 
   @override
@@ -31,7 +39,7 @@ class _TodosState extends State<Todos> {
           if (snapshot.hasData) {
             List<Todo> todosData = snapshot.data;
             return Scaffold(
-              drawer: NavDrawer(),
+              // drawer: NavDrawer(),
               appBar: AppBar(
                   bottom: TabBar(
                     tabs: [
@@ -44,6 +52,16 @@ class _TodosState extends State<Todos> {
                     child: Text("To Do Kaire Mor"),
                   )),
               body: TabBarView(children: [
+                new ListView.builder(
+                    itemCount: todosData.length,
+                    itemBuilder: (BuildContext ctxt, int index) {
+                      return new TodoItem(todosData[index]);
+                    }),
+                new ListView.builder(
+                    itemCount: todosData.length,
+                    itemBuilder: (BuildContext ctxt, int index) {
+                      return new TodoItem(todosData[index]);
+                    }),
                 new ListView.builder(
                     itemCount: todosData.length,
                     itemBuilder: (BuildContext ctxt, int index) {

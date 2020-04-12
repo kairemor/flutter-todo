@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import 'package:todo_app/main.dart';
+
+final storage = FlutterSecureStorage();
 
 class NavDrawer extends StatelessWidget {
   @override
@@ -9,19 +15,19 @@ class NavDrawer extends StatelessWidget {
         children: <Widget>[
           DrawerHeader(
             child: Text(
-              'Side menu',
+              'To Do KM Menu',
               style: TextStyle(color: Colors.white, fontSize: 25),
             ),
             decoration: BoxDecoration(
-                color: Colors.green,
+                color: Colors.cyanAccent,
                 image: DecorationImage(
                     fit: BoxFit.fill,
                     image: AssetImage('assets/images/cover.jpg'))),
           ),
           ListTile(
-            leading: Icon(Icons.input),
-            title: Text('Welcome'),
-            onTap: () => {},
+            leading: Icon(Icons.home),
+            title: Text('Home'),
+            onTap: () => {Navigator.of(context).pop()},
           ),
           ListTile(
             leading: Icon(Icons.verified_user),
@@ -34,17 +40,32 @@ class NavDrawer extends StatelessWidget {
             onTap: () => {Navigator.of(context).pop()},
           ),
           ListTile(
-            leading: Icon(Icons.border_color),
-            title: Text('Feedback'),
-            onTap: () => {Navigator.of(context).pop()},
+            leading: Icon(Icons.input),
+            title: Text('Login'),
+            onTap: () => {Navigator.pushNamed(context, LoginRoute)},
+          ),
+          ListTile(
+            leading: Icon(Icons.person_add),
+            title: Text('Register'),
+            onTap: () => {Navigator.pushNamed(context, RegisterRoute)},
           ),
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: () => onLogout(context),
+          ),
+          ListTile(
+            leading: Icon(Icons.close),
+            title: Text('Exit'),
+            onTap: () => exit(0),
           ),
         ],
       ),
     );
   }
+}
+
+onLogout(BuildContext context) {
+  storage.delete(key: "token");
+  Navigator.pushNamed(context, LoginRoute);
 }
