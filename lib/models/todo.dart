@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -21,19 +22,23 @@ class Todo {
   }
 }
 
-Future<List<Todo>> getAll(String token) async {
+Future<List<Todo>> getAll() async {
+  final token = await jwtOrEmpty;
+
+  print("token todos all $token");
   final response = await http.get(url, headers: {
     "Authorization": "bearer $token",
     "Content-Type": "application/json"
   });
-  print("statuscode ${response.statusCode}");
+  print("statuscode todos all  ${response.statusCode}");
   if (response.statusCode == 200) {
     final jsonDat = json.decode(response.body);
     final jsonData = jsonDat["data"] as List;
     // print("$jsonData kkkkkkkkkk jsonData");
     return jsonData.map<Todo>((todo) => Todo.fromJson(todo)).toList();
   } else {
-    throw Exception('Failed to load todos ');
+    // throw Exception('Failed to load todos ');
+    return null;
   }
 }
 
@@ -50,6 +55,7 @@ Future<Todo> getTodo(String id) {
       throw Exception("Todo not found");
     }
   }).catchError((err) => throw Exception(err));
+  return null;
 }
 
 void changeTodoState(String id, bool isCompleted) async {

@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import '../../models/todo.dart';
 import 'todoItem.dart';
 import '../app.dart';
-import '../../models/user.dart';
+// import '../../models/user.dart';
 import '../../navdrawer/navdrawer.dart';
+import 'package:flutter/scheduler.dart';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+final storage = FlutterSecureStorage();
 
 class Todos extends StatefulWidget {
   Todos({Key key}) : super(key: key);
@@ -18,12 +23,13 @@ class _TodosState extends State<Todos> {
   @override
   void initState() {
     super.initState();
-    jwtOrEmpty.then((value) {
-      if (value == '') {
-        Navigator.pushNamed(context, LoginRoute);
-      }
-      todos = getAll(value);
-    });
+    todos = getAll();
+    // if (todos == null) {
+    //   storage.delete(key: "token");
+    //   SchedulerBinding.instance.addPostFrameCallback((_) {
+    //     Navigator.of(context).pushNamed(LoginRoute);
+    //   });
+    // }
   }
 
   @override
