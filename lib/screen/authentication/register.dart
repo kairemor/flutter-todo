@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'dart:convert' show json, base64, ascii;
+import '../app.dart';
+import '../../models/user.dart';
 
-const SERVER_IP = 'http://192.168.1.167:5000';
 final storage = FlutterSecureStorage();
 
 class RegisterPage extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _fnameController = TextEditingController();
+  final TextEditingController _lnameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   void displayDialog(context, title, text) => showDialog(
@@ -15,12 +16,6 @@ class RegisterPage extends StatelessWidget {
         builder: (context) =>
             AlertDialog(title: Text(title), content: Text(text)),
       );
-
-  Future<int> attemptSignUp(String username, String password) async {
-    var res = await http.post('$SERVER_IP/signup',
-        body: {"username": username, "password": password});
-    return res.statusCode;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +36,21 @@ class RegisterPage extends StatelessWidget {
                 obscureText: true,
                 decoration: InputDecoration(labelText: 'Password'),
               ),
+              TextField(
+                controller: _fnameController,
+                obscureText: true,
+                decoration: InputDecoration(labelText: 'First Name'),
+              ),
+              TextField(
+                controller: _lnameController,
+                obscureText: true,
+                decoration: InputDecoration(labelText: 'Last Name'),
+              ),
               FlatButton(
                   onPressed: () async {
                     var username = _usernameController.text;
+                    var fname = _fnameController.text;
+                    var lname = _lnameController.text;
                     var password = _passwordController.text;
 
                     if (username.length < 4)
@@ -53,21 +60,18 @@ class RegisterPage extends StatelessWidget {
                       displayDialog(context, "Invalid Password",
                           "The password should be at least 4 characters long");
                     else {
-                      var res = await attemptSignUp(username, password);
-                      if (res == 201)
+                      var token =
+                          await register(username, fname, lname, password, '');
+                      print("token register $token");
+                      if (token != null) {
                         displayDialog(context, "Success",
                             "The user was created. Log in now.");
-                      else if (res == 409)
-                        displayDialog(
-                            context,
-                            "That username is already registered",
-                            "Please try to sign up using another username or log in if you already have an account.");
-                      else {
-                        displayDialog(
-                            context, "Error", "An unknown error occurred.");
+                        storage.write(key: "token", value: token);
+                        Navigator.pushNamed(context, TodoRoute);
                       }
                     }
                   },
+                  color: Colors.cyanAccent,
                   child: Text("Sign Up"))
             ],
           ),

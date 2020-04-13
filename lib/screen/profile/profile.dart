@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TodoSingle extends StatelessWidget {
-  final String id;
-  TodoSingle(this.id);
-  @override
+class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -18,7 +15,7 @@ class TodoSingle extends StatelessWidget {
               children: <Widget>[
                 const ListTile(
                   leading: Icon(Icons.album),
-                  title: Text('The Enchanted Nightingale'),
+                  title: Text('Profile Page'),
                   subtitle:
                       Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
                 ),

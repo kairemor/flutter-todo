@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import './models/todo.dart';
-import './todoItem.dart';
-import './main.dart';
-import './models/user.dart';
-import 'navdrawer.dart';
+import '../../models/todo.dart';
+import 'todoItem.dart';
+import '../app.dart';
+import '../../models/user.dart';
+import '../../navdrawer/navdrawer.dart';
 
 class Todos extends StatefulWidget {
   Todos({Key key}) : super(key: key);
@@ -22,9 +22,7 @@ class _TodosState extends State<Todos> {
       if (value == '') {
         Navigator.pushNamed(context, LoginRoute);
       }
-      print("todos token  page $value");
       todos = getAll(value);
-      print("state todos end");
     });
   }
 
@@ -39,7 +37,7 @@ class _TodosState extends State<Todos> {
           if (snapshot.hasData) {
             List<Todo> todosData = snapshot.data;
             return Scaffold(
-              // drawer: NavDrawer(),
+              drawer: NavDrawer(),
               appBar: AppBar(
                   bottom: TabBar(
                     tabs: [
@@ -60,12 +58,20 @@ class _TodosState extends State<Todos> {
                 new ListView.builder(
                     itemCount: todosData.length,
                     itemBuilder: (BuildContext ctxt, int index) {
-                      return new TodoItem(todosData[index]);
+                      if (!todosData[index].isCompleted) {
+                        return new TodoItem(todosData[index]);
+                      } else {
+                        return Text("");
+                      }
                     }),
                 new ListView.builder(
                     itemCount: todosData.length,
                     itemBuilder: (BuildContext ctxt, int index) {
-                      return new TodoItem(todosData[index]);
+                      if (todosData[index].isCompleted) {
+                        return new TodoItem(todosData[index]);
+                      } else {
+                        return Text("");
+                      }
                     })
               ]),
               floatingActionButton: FloatingActionButton(

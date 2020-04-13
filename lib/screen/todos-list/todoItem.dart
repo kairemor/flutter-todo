@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import './models/todo.dart';
-import './main.dart';
+import '../../models/todo.dart';
+import '../app.dart';
 
 class TodoItem extends StatefulWidget {
   final Todo todo;
@@ -20,8 +20,9 @@ class TodoItemState extends State<TodoItem> {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () => _onTodoTap(context, todo.id),
-        child: new ListTile(
-            title: new Row(
+        child: Card(
+            child: new ListTile(
+                title: new Row(
           children: <Widget>[
             new Checkbox(
                 value: todo.isCompleted,
@@ -33,7 +34,7 @@ class TodoItemState extends State<TodoItem> {
                 }),
             new Expanded(child: new Text(todo.title)),
           ],
-        )));
+        ))));
   }
 
   _onTodoTap(BuildContext context, String todoID) {

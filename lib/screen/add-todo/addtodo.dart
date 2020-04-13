@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import './models/todo.dart';
-import 'main.dart';
+import '../../models/todo.dart';
+import '../app.dart';
 
 // Create a Form widget.
 class AddTodo extends StatefulWidget {
@@ -12,19 +12,18 @@ class AddTodo extends StatefulWidget {
   }
 }
 
-// Create a corresponding State class.
-// This class holds data related to the form.
 class AddTodoState extends State<AddTodo> {
-  // Create a global key that uniquely identifies the Form widget
-  // and allows validation of the form.
-  //
-  // Note: This is a GlobalKey<FormState>,
-  // not a GlobalKey<MyCustomFormState>.
   final _formKey = GlobalKey<FormState>();
   final format = DateFormat("yyyy-MM-dd HH:mm");
   String title;
   String desc;
   DateTime todoAt;
+
+  void displayDialog(context, title, text) => showDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(title: Text(title), content: Text(text)),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -102,12 +101,10 @@ class AddTodoState extends State<AddTodo> {
                     child: RaisedButton(
                       color: Colors.cyan,
                       onPressed: () {
-                        // Validate returns true if the form is valid, or false
-                        // otherwise.
                         if (_formKey.currentState.validate()) {
-                          // If the form is valid, display a Snackbar.
-                          print(todoAt);
+                          print("$title, $desc, $todoAt");
                           addTodo(title, desc, todoAt);
+                          displayDialog(context, 'todo add', 'sucess');
                           _onSubmit(context);
                           // Scaffold.of(context).showSnackBar(
                           //     SnackBar(content: Text('Processing Data')));
