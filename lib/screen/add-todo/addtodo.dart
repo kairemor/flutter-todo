@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:todo_app/notification/local_notications_helper.dart';
 import '../../models/todo.dart';
 import '../app.dart';
 
@@ -100,17 +101,23 @@ class AddTodoState extends State<AddTodo> {
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: RaisedButton(
                       color: Colors.cyan,
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState.validate()) {
                           print("$title, $desc, $todoAt");
-                          addTodo(title, desc, todoAt);
+                          displayDialog(context, 'todo add', 'wait adding');
+                          Todo todoCreate = await addTodo(title, desc, todoAt);
+                          scheduleOngoingScheduleNotification(notifications,
+                              title: 'la Tache $title doit etre fati',
+                              body: desc,
+                              scheduled: todoAt,
+                              payload: todoCreate.id);
                           displayDialog(context, 'todo add', 'sucess');
                           _onSubmit(context);
                           // Scaffold.of(context).showSnackBar(
                           //     SnackBar(content: Text('Processing Data')));
                         }
                       },
-                      child: Text('Submit'),
+                      child: Text('Create'),
                     ),
                   ),
                 ],

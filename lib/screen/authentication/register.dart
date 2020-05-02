@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../app.dart';
 import '../../models/user.dart';
-
-final storage = FlutterSecureStorage();
 
 class RegisterPage extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
@@ -23,58 +20,62 @@ class RegisterPage extends StatelessWidget {
         appBar: AppBar(
           title: Text("Log In"),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              TextField(
-                controller: _usernameController,
-                decoration: InputDecoration(labelText: 'Username'),
-              ),
-              TextField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: InputDecoration(labelText: 'Password'),
-              ),
-              TextField(
-                controller: _fnameController,
-                obscureText: true,
-                decoration: InputDecoration(labelText: 'First Name'),
-              ),
-              TextField(
-                controller: _lnameController,
-                obscureText: true,
-                decoration: InputDecoration(labelText: 'Last Name'),
-              ),
-              FlatButton(
-                  onPressed: () async {
-                    var username = _usernameController.text;
-                    var fname = _fnameController.text;
-                    var lname = _lnameController.text;
-                    var password = _passwordController.text;
+        body: Container(
+            width: 500,
+            color: Colors.amber,
+            child: Card(
+              elevation: 10,
+              margin: EdgeInsets.only(top: 5),
+              child: Column(
+                children: <Widget>[
+                  TextField(
+                    controller: _usernameController,
+                    decoration: InputDecoration(labelText: 'Username'),
+                  ),
+                  TextField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(labelText: 'Password'),
+                  ),
+                  TextField(
+                    controller: _fnameController,
+                    obscureText: true,
+                    decoration: InputDecoration(labelText: 'First Name'),
+                  ),
+                  TextField(
+                    controller: _lnameController,
+                    obscureText: true,
+                    decoration: InputDecoration(labelText: 'Last Name'),
+                  ),
+                  FlatButton(
+                      onPressed: () async {
+                        var username = _usernameController.text;
+                        var fname = _fnameController.text;
+                        var lname = _lnameController.text;
+                        var password = _passwordController.text;
 
-                    if (username.length < 4)
-                      displayDialog(context, "Invalid Username",
-                          "The username should be at least 4 characters long");
-                    else if (password.length < 4)
-                      displayDialog(context, "Invalid Password",
-                          "The password should be at least 4 characters long");
-                    else {
-                      var token =
-                          await register(username, fname, lname, password, '');
-                      print("token register $token");
-                      if (token != null) {
-                        displayDialog(context, "Success",
-                            "The user was created. Log in now.");
-                        storage.write(key: "token", value: token);
-                        Navigator.pushNamed(context, TodoRoute);
-                      }
-                    }
-                  },
-                  color: Colors.cyanAccent,
-                  child: Text("Sign Up"))
-            ],
-          ),
-        ));
+                        if (username.length < 4)
+                          displayDialog(context, "Invalid Username",
+                              "The username should be at least 4 characters long");
+                        else if (password.length < 4)
+                          displayDialog(context, "Invalid Password",
+                              "The password should be at least 4 characters long");
+                        else {
+                          var token = await register(
+                              username, fname, lname, password, '');
+                          print("token register $token");
+                          if (token != null) {
+                            displayDialog(context, "Success",
+                                "The user was created. Log in now.");
+                            storage.write(key: "token", value: token);
+                            Navigator.pushNamed(context, TodoRoute);
+                          }
+                        }
+                      },
+                      color: Colors.cyanAccent,
+                      child: Text("Sign Up"))
+                ],
+              ),
+            )));
   }
 }

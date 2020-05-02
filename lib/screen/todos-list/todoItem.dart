@@ -21,20 +21,22 @@ class TodoItemState extends State<TodoItem> {
     return GestureDetector(
         onTap: () => _onTodoTap(context, todo.id),
         child: Card(
+            elevation: 6,
+            margin: const EdgeInsets.only(bottom: 3, top: 2),
             child: new ListTile(
                 title: new Row(
-          children: <Widget>[
-            new Checkbox(
-                value: todo.isCompleted,
-                onChanged: (bool value) {
-                  changeTodoState(todo.id, todo.isCompleted);
-                  setState(() {
-                    todo.isCompleted = value;
-                  });
-                }),
-            new Expanded(child: new Text(todo.title)),
-          ],
-        ))));
+              children: <Widget>[
+                new Checkbox(
+                    value: todo.isCompleted,
+                    onChanged: (bool value) {
+                      changeTodoState(todo.id, todo.isCompleted);
+                      setState(() {
+                        todo.isCompleted = value;
+                      });
+                    }),
+                new Expanded(child: new Text(todo.title)),
+              ],
+            ))));
   }
 
   _onTodoTap(BuildContext context, String todoID) {
